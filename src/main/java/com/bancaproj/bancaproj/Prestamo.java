@@ -1,10 +1,10 @@
 package com.bancaproj.bancaproj;
 
 public class Prestamo {
-    
+
     private String nombreCliente;
     private int numeroDeIdentificacion;
-    private double montoPrestamo; 
+    private double montoPrestamo;
     private double tasaInteres;
     private String fechaInicio; //Pendiente; la fecha de incio se debe generar automaticamnete al dia de hoy?
     private int plazoMeses;
@@ -20,11 +20,10 @@ public class Prestamo {
         setTasaInteres(tasaInteres);
         setFechaInicio(fechaInicio); // Pending
         setPlazoMeses(plazoMeses);
-        setNumeroOperacion(numeroOperacion);
+        setNumeroOperacion();
     }
-    
-    //Getters
 
+    //Getters
     public String getNombreCliente() {
         return nombreCliente;
     }
@@ -52,9 +51,8 @@ public class Prestamo {
     public int getNumeroOperacion() {
         return numeroOperacion;
     }
-    
-    //Setters
 
+    //Setters
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
     }
@@ -78,19 +76,19 @@ public class Prestamo {
     public void setPlazoMeses(int plazoMeses) {
         this.plazoMeses = plazoMeses;
     }
+    
+     //Calcular de forma automatica, ver doc para validar el formato
+    public void setNumeroOperacion() {
+      
+    }
 
     //Metodos
-    
-    //Calcular de forma automatica, ver doc para validar el formato
-    public void crearNumeroOperacion(){
-     
+    public void calcularCuotaMensual() {
+
     }
-    
-    public void calcularCuotaMensual(){
-        
-    }
-    
+
     //Agregar el prestamo activo al cliente
-    public void agregarPrestamo(int numeroDeIdentificacion){
+    public void agregarPrestamo(int numeroDeIdentificacion) {
+        
     }
 };
