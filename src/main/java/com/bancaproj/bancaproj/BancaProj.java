@@ -26,7 +26,7 @@ public class BancaProj {
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "");
-            };
+            }
         };
     }
 }
