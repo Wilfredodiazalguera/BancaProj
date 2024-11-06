@@ -15,10 +15,8 @@ public class BancaProj {
 
             switch (opcion) {
                 case 1:
-
                     break;
                 case 2:
-
                     break;
                 case 3:
                     break;
@@ -27,6 +25,6 @@ public class BancaProj {
                 default:
                     JOptionPane.showMessageDialog(null, "");
             }
-        };
+        }
     }
 }
