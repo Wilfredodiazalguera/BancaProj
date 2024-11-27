@@ -49,11 +49,28 @@ public class Transaccion {
 
     //Metodos
     public static void realizarDeposito() {
+        String numeroCuenta = JOptionPane.showInputDialog("Ingrese el número de cuenta:");
+        Cuenta cuenta = obtenerCuenta(numeroCuenta);
+
+        if (cuenta == null) {
+            JOptionPane.showMessageDialog(null, "Cuenta no encontrada.");
+            return;
+        }
+
         double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a depositar:"));
         if (monto <= 0) {
             JOptionPane.showMessageDialog(null, "Monto inválido.");
             return;
         }
+
+        cuenta.setSaldoInicial(cuenta.getSaldoInicial() + monto);
+        Transaccion transaccion = new Transaccion();
+        transaccion.setCuenta(cuenta);
+        transaccion.setMonto(monto);
+        transaccion.setTipoTransaccion("Deposito");
+        registrarTransaccion(transaccion);
+        JOptionPane.showMessageDialog(null, "Deposito realizado");
+
     }
 
     public static void realizarRetiro() {
@@ -66,16 +83,16 @@ public class Transaccion {
 
     public static void realizarTransferencia() {
     }
-    
+
     public static Cuenta obtenerCuenta(String numeroCuenta) {
-    for (Cuenta cuenta : Cuenta.getCuentasRegistradas()) {
-        if (cuenta.getNumeroCuenta().equals(numeroCuenta)) {
-            return cuenta;
+        for (Cuenta cuenta : Cuenta.getCuentasRegistradas()) {
+            if (cuenta.getNumeroCuenta().equals(numeroCuenta)) {
+                return cuenta;
+            }
         }
+        return null;  // Si no se encuentra la cuenta, devuelve null
     }
-    return null;  // Si no se encuentra la cuenta, devuelve null
-}
-    
+
     public static void registrarTransaccion(Transaccion transaccion) {
         if (totalTransaccionesRegistradas < totalTransacciones.length) {
             totalTransacciones[totalTransaccionesRegistradas++] = transaccion;
@@ -108,6 +125,10 @@ public class Transaccion {
 
     public void setMonto(double monto) {
         this.monto = monto;
+    }
+
+    public void setTipoTransaccion(String tipoTransaccion) {
+        this.tipoTransaccion = tipoTransaccion;
     }
 
 }
