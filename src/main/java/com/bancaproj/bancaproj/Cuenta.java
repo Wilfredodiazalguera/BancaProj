@@ -101,13 +101,25 @@ public class Cuenta {
     }
 
     // Metodos
-    
     public void crearNumeroCuenta() {
-        int inicio = random.nextInt(1000);
-        int fin = random.nextInt(1000, 10000);
+        String nuevoNumero;
 
-        this.numeroCuenta = inicio + "-" + fin;
+        do {
+            int inicio = random.nextInt(1000);
+            int fin = random.nextInt(1000, 10000);
+            nuevoNumero = inicio + "-" + fin;
+        }while (numeroCuentaExiste(nuevoNumero));   
+        
+        this.numeroCuenta = nuevoNumero;
+    }
 
+    private boolean numeroCuentaExiste(String numero) {
+        for (Cuenta cuenta : cuentasRegistradas) {
+            if (cuenta != null && numero.equals(cuenta.getNumeroCuenta())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public LocalDateTime getFechaDeApertura() {
@@ -135,10 +147,10 @@ public class Cuenta {
     }
 
     public static void CrearCuenta() {
-        
+
         //Solicitar nombre
         String nombreCliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente: ");
-        
+
         //Solicitar identificacion y validar que no exista
         int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de identificacion: "));
         for (Cuenta cuenta : cuentasRegistradas) {
@@ -147,14 +159,14 @@ public class Cuenta {
                 return;
             }
         }
-        
+
         //Solcitar tipo de cuenta
         String tipoCuentaStr = JOptionPane.showInputDialog("Seleccione el tipo de cuenta:\n1. Corriente\n2. Ahorros\n3. Empresarial");
         int opcionTipoCuenta = Integer.parseInt(tipoCuentaStr);
 
         //Solicitar saldo inicial
         double saldoInicial = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el saldo inicial: "));
-        
+
         //Crear cuenta
         Cuenta nuevaCuenta = new Cuenta();
         nuevaCuenta.setTipoCuenta(opcionTipoCuenta);
@@ -183,7 +195,7 @@ public class Cuenta {
         // Logica para agregar las cuentas activas por tipo usando if
         for (Cuenta cuenta : cuentasRegistradas) {
             if (cuenta != null && cuenta.isEstaActiva()) {
-                
+
                 if (cuenta.getTipoDeCuenta() == TipoCuenta.Corriente) {
                     if (!tieneCuentasCorrientes) {
                         reporte.append("\nCuentas de tipo CORRIENTE:\n");
@@ -194,7 +206,7 @@ public class Cuenta {
                             .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
                             .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())
                             .append("\n*************************\n");
-                    
+
                 } else if (cuenta.getTipoDeCuenta() == TipoCuenta.Ahorros) {
                     if (!tieneCuentasAhorros) {
                         reporte.append("\nCuentas de tipo AHORROS:\n");
@@ -205,7 +217,7 @@ public class Cuenta {
                             .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
                             .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())
                             .append("\n*************************\n");
-                    
+
                 } else if (cuenta.getTipoDeCuenta() == TipoCuenta.Empresarial) {
                     if (!tieneCuentasEmpresariales) {
                         reporte.append("\nCuentas de tipo EMPRESARIAL:\n");
