@@ -100,7 +100,8 @@ public class Cuenta {
         }
     }
 
-    // Metodo
+    // Metodos
+    
     public void crearNumeroCuenta() {
         int inicio = random.nextInt(1000);
         int fin = random.nextInt(1000, 10000);
@@ -117,8 +118,28 @@ public class Cuenta {
         this.fechaApertura = LocalDateTime.now();
     }
 
-    public static void registrarCuenta() {
+    public void setTipoCuenta(int opcionTipoCuenta) {
+        switch (opcionTipoCuenta) {
+            case 1:
+                this.tipoDeCuenta = TipoCuenta.Corriente;
+                break;
+            case 2:
+                this.tipoDeCuenta = TipoCuenta.Ahorros;
+                break;
+            case 3:
+                this.tipoDeCuenta = TipoCuenta.Empresarial;
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Opción inválida. Intenta nuevamente.");
+        }
+    }
+
+    public static void CrearCuenta() {
+        
+        //Solicitar nombre
         String nombreCliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente: ");
+        
+        //Solicitar identificacion y validar que no exista
         int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de identificacion: "));
         for (Cuenta cuenta : cuentasRegistradas) {
             if (cuenta != null && cuenta.getNumeroDeIdentificacion() == numeroIdentificacion) {
@@ -126,17 +147,86 @@ public class Cuenta {
                 return;
             }
         }
+        
+        //Solcitar tipo de cuenta
+        String tipoCuentaStr = JOptionPane.showInputDialog("Seleccione el tipo de cuenta:\n1. Corriente\n2. Ahorros\n3. Empresarial");
+        int opcionTipoCuenta = Integer.parseInt(tipoCuentaStr);
+
+        //Solicitar saldo inicial
         double saldoInicial = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el saldo inicial: "));
+        
+        //Crear cuenta
         Cuenta nuevaCuenta = new Cuenta();
+        nuevaCuenta.setTipoCuenta(opcionTipoCuenta);
         nuevaCuenta.setNombreCliente(nombreCliente);
         nuevaCuenta.setNumeroDeIdentificacion(numeroIdentificacion);
         nuevaCuenta.setSaldoInicial(saldoInicial);
         nuevaCuenta.setFechaApertura();
         nuevaCuenta.crearNumeroCuenta();
+        nuevaCuenta.setEstaActiva(true);
         JOptionPane.showMessageDialog(null, "Fecha de apertura: " + nuevaCuenta.getFechaDeApertura());
         JOptionPane.showMessageDialog(null, "Numero cuenta: " + nuevaCuenta.getNumeroCuenta());
 
+        //Se registra la cuenta 
         registrarCuenta(nuevaCuenta);
     }
+
+    public static void ImprimirCuentasActivasPorTipo() {
+        StringBuilder reporte = new StringBuilder();
+
+        //Estas varibales nos ayudan a imprimir solo una unica vez cada encabezado
+        //por eso luego de imprimirlo se cambia el valor de cada una
+        boolean tieneCuentasCorrientes = false;
+        boolean tieneCuentasAhorros = false;
+        boolean tieneCuentasEmpresariales = false;
+
+        // Logica para agregar las cuentas activas por tipo usando if
+        for (Cuenta cuenta : cuentasRegistradas) {
+            if (cuenta != null && cuenta.isEstaActiva()) {
+                
+                if (cuenta.getTipoDeCuenta() == TipoCuenta.Corriente) {
+                    if (!tieneCuentasCorrientes) {
+                        reporte.append("\nCuentas de tipo CORRIENTE:\n");
+                        tieneCuentasCorrientes = true;
+                    }
+                    reporte.append("\nCliente: ").append(cuenta.getNombreCliente())
+                            .append("\nNúmero de cuenta: ").append(cuenta.getNumeroCuenta())
+                            .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
+                            .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())
+                            .append("\n*************************\n");
+                    
+                } else if (cuenta.getTipoDeCuenta() == TipoCuenta.Ahorros) {
+                    if (!tieneCuentasAhorros) {
+                        reporte.append("\nCuentas de tipo AHORROS:\n");
+                        tieneCuentasAhorros = true;
+                    }
+                    reporte.append("\nCliente: ").append(cuenta.getNombreCliente())
+                            .append("\nNúmero de cuenta: ").append(cuenta.getNumeroCuenta())
+                            .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
+                            .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())
+                            .append("\n*************************\n");
+                    
+                } else if (cuenta.getTipoDeCuenta() == TipoCuenta.Empresarial) {
+                    if (!tieneCuentasEmpresariales) {
+                        reporte.append("\nCuentas de tipo EMPRESARIAL:\n");
+                        tieneCuentasEmpresariales = true;
+                    }
+                    reporte.append("\nCliente: ").append(cuenta.getNombreCliente())
+                            .append("\nNúmero de cuenta: ").append(cuenta.getNumeroCuenta())
+                            .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
+                            .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())
+                            .append("\n*************************\n");
+                }
+            }
+        } // Aca se finaliza el for
+
+        // Si no hay cuentas activas de ningún tipo
+        if (reporte.length() == 0) {
+            JOptionPane.showMessageDialog(null, "No hay cuentas activas en este momento.");
+        } else {
+            // Mostrar el reporte de las cuentas activas agrupadas por tipo
+            JOptionPane.showMessageDialog(null, reporte.toString());
+        }
+    } // Aca se termina el metodo ImprimirCuentasActivasPorTipo()
 
 }
