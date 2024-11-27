@@ -1,25 +1,29 @@
 package com.bancaproj.bancaproj;
 
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
 public class Transaccion {
 
-    //Pending; Crear variable Array static totalTransacciones
+    public static Transaccion[] totalTransacciones = new Transaccion[100];
+    private static int totalTransaccionesRegistradas = 0;
+
     private Cuenta cuenta;
     private Cuenta cuentaDestino;
     private Cuenta cuentaOrigen;
     private double monto;
     private String tipoTransaccion;
+    private LocalDateTime fechaTransaccion;
 
     public Transaccion() {
     }
-    //j
 
     public Transaccion(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto, String tipoTransaccion) {
         this.cuentaOrigen = cuentaOrigen;
         this.cuentaDestino = cuentaDestino;
         this.monto = monto;
         this.tipoTransaccion = tipoTransaccion;
+        this.fechaTransaccion = LocalDateTime.now();
     }
 
     public static void realizarTransacciones() {
@@ -62,8 +66,22 @@ public class Transaccion {
 
     public static void realizarTransferencia() {
     }
-
-    public void registrarTransaccion() {
+    
+    public static Cuenta obtenerCuenta(String numeroCuenta) {
+    for (Cuenta cuenta : Cuenta.getCuentasRegistradas()) {
+        if (cuenta.getNumeroCuenta().equals(numeroCuenta)) {
+            return cuenta;
+        }
+    }
+    return null;  // Si no se encuentra la cuenta, devuelve null
+}
+    
+    public static void registrarTransaccion(Transaccion transaccion) {
+        if (totalTransaccionesRegistradas < totalTransacciones.length) {
+            totalTransacciones[totalTransaccionesRegistradas++] = transaccion;
+        } else {
+            JOptionPane.showMessageDialog(null, "Se ha alcanzado el máximo de transacciones.");
+        }
     }
 
     //Getter
