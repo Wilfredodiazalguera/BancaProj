@@ -18,6 +18,7 @@ public class BancaProj {
                     Cuenta.registrarCuenta();
                     break;
                 case 2:
+                    Transaccion.realizarTransacciones();
                     break;
                 case 3:
                     break;
