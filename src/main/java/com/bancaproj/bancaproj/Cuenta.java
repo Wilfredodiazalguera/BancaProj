@@ -10,7 +10,6 @@ public class Cuenta {
     private int numeroDeIdentificacion;
     private TipoCuenta tipoDeCuenta;
     private double saldoInicial;
-    private String fechaDeApertura;
     private String fechaDeCierre;
     private boolean estaActiva;
     private String numeroCuenta;
@@ -29,7 +28,6 @@ public class Cuenta {
         setNumeroDeIdentificacion(numeroDeIdentificacion);
         setTipoDeCuenta(tipoDeCuenta);
         setSaldoInicial(saldoInicial);
-        setFechaDeApertura(fechaDeApertura);
         setFechaDeCierre(fechaDeCierre);
         setEstaActiva(estaActiva);
         crearNumeroCuenta();
@@ -65,14 +63,6 @@ public class Cuenta {
 
     public void setSaldoInicial(double saldoInicial) {
         this.saldoInicial = saldoInicial;
-    }
-
-    public String getFechaApertura() {
-        return fechaDeApertura;
-    }
-
-    public void setFechaDeApertura(String fechaDeApertura) {
-        this.fechaDeApertura = fechaDeApertura;
     }
 
     public String getFechaDeCierre() {
@@ -125,7 +115,7 @@ public class Cuenta {
         nuevaCuenta.setNumeroDeIdentificacion(numeroIdentificacion);
         nuevaCuenta.setSaldoInicial(saldoInicial);
         nuevaCuenta.setFechaApertura();
-        JOptionPane.showMessageDialog(null, "Fecha de apertura: " + nuevaCuenta.getFechaApertura());
+        JOptionPane.showMessageDialog(null, "Fecha de apertura: " + nuevaCuenta.getFechaDeApertura());
         
     }
 
