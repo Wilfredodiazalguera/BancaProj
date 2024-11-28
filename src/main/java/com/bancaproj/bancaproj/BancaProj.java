@@ -19,7 +19,23 @@ public class BancaProj {
                     Cuenta.CrearCuenta();
                     break;
                 case 2:
-                    Transaccion.realizarTransacciones();
+                    String menuTransacciones = "Seleccione el tipo de transaccion\n"
+                            + "1. Deposito\n"
+                            + "2. Retiro\n"
+                            + "3. Transferencia\n";
+
+                    int tipoTransaccion = Integer.parseInt(JOptionPane.showInputDialog(menuTransacciones));
+                    switch (tipoTransaccion) {
+                        case 1: //Deposito
+                            Transaccion.realizarDeposito();
+                            break;
+                        case 2: //Retiro
+                            Transaccion.realizarRetiro();
+                            break;
+                        case 3: //Transferencia
+                            Transaccion.realizarTransferencia();
+                            break;
+                    }
                     break;
                 case 3:
                     break;
@@ -29,7 +45,7 @@ public class BancaProj {
                             + "2. Reporte de transacciones por cuenta\n"
                             + "3. Reporte de préstamos\n"
                             + "4. Volver al menu principal\n";
-                    
+
                     opcionReporte = Integer.parseInt(JOptionPane.showInputDialog(textoMenuReportes));
 
                     switch (opcionReporte) {
@@ -47,7 +63,7 @@ public class BancaProj {
                     }
                     break;
                 default:
-                     JOptionPane.showMessageDialog(null, "Opción inválida. Intenta nuevamente.");
+                    JOptionPane.showMessageDialog(null, "Opción inválida. Intenta nuevamente.");
             }
         }
     }

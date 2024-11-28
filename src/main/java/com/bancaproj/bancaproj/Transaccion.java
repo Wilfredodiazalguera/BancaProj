@@ -26,27 +26,6 @@ public class Transaccion {
         this.fechaTransaccion = LocalDateTime.now();
     }
 
-    public static void realizarTransacciones() {
-        int opcion = 0;
-        String menuTransacciones = "Seleccione el tipo de transaccion\n"
-                + "1. Deposito\n"
-                + "2. Retiro\n"
-                + "3. Transferencia\n";
-
-        int tipoTransaccion = Integer.parseInt(JOptionPane.showInputDialog(menuTransacciones));
-        switch (tipoTransaccion) {
-            case 1: //Deposito
-                realizarDeposito();
-                break;
-            case 2: //Retiro
-                realizarRetiro();
-                break;
-            case 3: //Transferencia
-                realizarTransferencia();
-                break;
-        }
-    }
-
     //Metodos
     public static void realizarDeposito() {
         String numeroCuenta = JOptionPane.showInputDialog("Ingrese el número de cuenta:");
