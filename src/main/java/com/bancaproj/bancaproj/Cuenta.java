@@ -3,14 +3,16 @@ package com.bancaproj.bancaproj;
 import java.util.Random;
 import javax.swing.JOptionPane;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Cuenta {
-
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss MM/dd/yyyy");
     private String nombreCliente;
     private int numeroDeIdentificacion;
     private TipoCuenta tipoDeCuenta;
     private double saldoInicial;
-    private String fechaDeCierre;
+    private LocalDateTime fechaDeCierre;
     private boolean estaActiva;
     private String numeroCuenta;
     private static Cuenta[] cuentasRegistradas = new Cuenta[50];
@@ -64,12 +66,12 @@ public class Cuenta {
         this.saldoInicial = saldoInicial;
     }
 
-    public String getFechaDeCierre() {
+    public LocalDateTime getFechaDeCierre() {
         return fechaDeCierre;
     }
 
     public void setFechaDeCierre(String fechaDeCierre) {
-        this.fechaDeCierre = fechaDeCierre;
+        this.fechaDeCierre = LocalDateTime.now();
     }
 
     public boolean isEstaActiva() {
@@ -122,8 +124,8 @@ public class Cuenta {
         return false;
     }
 
-    public LocalDateTime getFechaDeApertura() {
-        return fechaApertura;
+    public String getFechaDeApertura() {
+        return fechaApertura.format(formatter);
     }
 
     public void setFechaApertura() {
