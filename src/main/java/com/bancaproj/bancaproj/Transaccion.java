@@ -12,13 +12,13 @@ public class Transaccion {
     private Cuenta cuentaDestino;
     private Cuenta cuentaOrigen;
     private double monto;
-    private String tipoTransaccion;
+    private TipoTransaccion tipoTransaccion;
     private LocalDateTime fechaTransaccion;
 
     public Transaccion() {
     }
 
-    public Transaccion(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto, String tipoTransaccion) {
+    public Transaccion(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto, TipoTransaccion tipoTransaccion) {
         this.cuentaOrigen = cuentaOrigen;
         this.cuentaDestino = cuentaDestino;
         this.monto = monto;
@@ -106,7 +106,7 @@ public class Transaccion {
         this.monto = monto;
     }
 
-    public void setTipoTransaccion(String tipoTransaccion) {
+    public void setTipoTransaccion(TipoTransaccion tipoTransaccion) {
         this.tipoTransaccion = tipoTransaccion;
     }
 
