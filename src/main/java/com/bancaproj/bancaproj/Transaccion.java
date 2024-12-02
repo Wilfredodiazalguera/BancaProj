@@ -7,50 +7,43 @@ public class Transaccion {
 
     public static Transaccion[] totalTransacciones = new Transaccion[100];
     private static int totalTransaccionesRegistradas = 0;
-
-    private Cuenta cuenta;
-    private Cuenta cuentaDestino;
-    private Cuenta cuentaOrigen;
     private double monto;
     private TipoTransaccion tipoTransaccion;
+    private Cuenta cuentaOrigen;
+    private Cuenta cuentaDestino;
     private LocalDateTime fechaTransaccion;
 
     public Transaccion() {
     }
 
-    public Transaccion(Cuenta cuentaOrigen, Cuenta cuentaDestino, double monto, TipoTransaccion tipoTransaccion) {
-        this.cuentaOrigen = cuentaOrigen;
-        this.cuentaDestino = cuentaDestino;
+    public Transaccion(double monto, TipoTransaccion tipoTransaccion, Cuenta cuentaOrigen, Cuenta cuentaDestino) {
         this.monto = monto;
         this.tipoTransaccion = tipoTransaccion;
+        this.cuentaOrigen = cuentaOrigen;
+        this.cuentaDestino = cuentaDestino;
         this.fechaTransaccion = LocalDateTime.now();
     }
 
     //Metodos
-//    public static void realizarDeposito() {
-//        String numeroCuenta = JOptionPane.showInputDialog("Ingrese el número de cuenta:");
-//        Cuenta cuenta = obtenerCuenta(numeroCuenta);
-//
-//        if (cuenta == null) {
-//            JOptionPane.showMessageDialog(null, "Cuenta no encontrada.");
-//            return;
-//        }
-//
-//        double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a depositar:"));
-//        if (monto <= 0) {
-//            JOptionPane.showMessageDialog(null, "Monto inválido.");
-//            return;
-//        }
-//
-//        cuenta.setSaldoInicial(cuenta.getSaldoInicial() + monto);
-//        Transaccion transaccion = new Transaccion();
-//        transaccion.setCuenta(cuenta);
-//        transaccion.setMonto(monto);
-//        transaccion.setTipoTransaccion("Deposito");
-//        registrarTransaccion(transaccion);
-//        JOptionPane.showMessageDialog(null, "Deposito realizado");
-//
-//    }
+    public static void realizarDeposito() {
+        int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de identificación del cliente:"));
+        Cuenta cuenta = obtenerCuentaPorIdentificacion(numeroIdentificacion); 
+
+        if (cuenta != null) {
+            double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a depositar:"));
+            if (monto <= 0) {
+                JOptionPane.showMessageDialog(null, "Monto inválido.");
+                return;
+            }
+
+
+            cuenta.setSaldoInicial(cuenta.getSaldoInicial() + monto);
+            registrarTransaccion(new Transaccion(monto, TipoTransaccion.Deposito, cuenta, null));
+            JOptionPane.showMessageDialog(null, "Depósito realizado exitosamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Cuenta no encontrada.");
+        }
+    }
 
     public static void realizarRetiro() {
         double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a depositar:"));
@@ -63,14 +56,14 @@ public class Transaccion {
     public static void realizarTransferencia() {
     }
 
-//    public static Cuenta obtenerCuenta(String numeroCuenta) {
-//        for (Cuenta cuenta : Cuenta.getCuentasRegistradas()) {
-//            if (cuenta.getNumeroCuenta().equals(numeroCuenta)) {
-//                return cuenta;
-//            }
-//        }
-//        return null;  // Si no se encuentra la cuenta, devuelve null
-//    }
+    public static Cuenta obtenerCuentaPorIdentificacion(int numeroIdentificacion) {
+        for (Cuenta cuenta : BancaProj.getCuentasRegistradas()) {
+            if (cuenta != null && cuenta.getNumeroDeIdentificacion() == numeroIdentificacion) {
+                return cuenta;
+            }
+        }
+        return null;
+    }
 
     public static void registrarTransaccion(Transaccion transaccion) {
         if (totalTransaccionesRegistradas < totalTransacciones.length) {
@@ -81,31 +74,15 @@ public class Transaccion {
     }
 
     //Getter
-    public Cuenta getCuenta() {
-        return cuenta;
-    }
-
-    public Cuenta getCuentaDestino() {
-        return cuentaDestino;
-    }
-
     public double getMonto() {
         return monto;
     }
-    
+
     public LocalDateTime getFecha() {
         return fechaTransaccion;
     }
 
     //Setter
-    public void setCuenta(Cuenta cuenta) {
-        this.cuenta = cuenta;
-    }
-
-    public void setCuentaDestino(Cuenta cuentaDestino) {
-        this.cuentaDestino = cuentaDestino;
-    }
-
     public void setMonto(double monto) {
         this.monto = monto;
     }

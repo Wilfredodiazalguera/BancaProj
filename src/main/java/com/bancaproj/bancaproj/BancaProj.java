@@ -48,8 +48,8 @@ public class BancaProj {
 
                     int tipoTransaccion = Integer.parseInt(JOptionPane.showInputDialog(menuTransacciones));
                     switch (tipoTransaccion) {
-                        case 1: //Deposito
-                            //Transaccion.realizarDeposito();
+                        case 1:
+                            Transaccion.realizarDeposito();
                             break;
                         case 2: //Retiro
                             //Transaccion.realizarRetiro();
