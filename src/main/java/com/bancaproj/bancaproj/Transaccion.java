@@ -92,6 +92,10 @@ public class Transaccion {
     public double getMonto() {
         return monto;
     }
+    
+    public LocalDateTime getFecha() {
+        return fechaTransaccion;
+    }
 
     //Setter
     public void setCuenta(Cuenta cuenta) {

@@ -20,7 +20,7 @@ public class BancaProj {
 
             switch (opcion) {
                 case 1:
-                     //Identifacion
+                    //Identifacion
                     int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de identificacion: "));
                     boolean validacionIdentificacion = Cuenta.validarIdentificacionUnica(numeroIdentificacion, cuentasRegistradas);
                     if (validacionIdentificacion) {
@@ -76,6 +76,7 @@ public class BancaProj {
                             ImprimirCuentasActivasPorTipo();
                             break;
                         case 2:
+                            reporteTransaccionesPorCuenta();
                             break;
                         case 3:
                             break;
@@ -164,4 +165,18 @@ public class BancaProj {
         }
     } // Aca se termina el metodo ImprimirCuentasActivasPorTipo()
 
+    public static void reporteTransaccionesPorCuenta() {
+        StringBuilder reporte = new StringBuilder();
+
+        for (Cuenta cuenta : cuentasRegistradas) {
+            if (cuenta != null) {
+                reporte.append("Cuenta N°: ").append(cuenta.getNumeroCuenta())
+                        .append("\nCliente: ").append(cuenta.getNombreCliente())
+                        .append("\nTipo de Cuenta: ").append(cuenta.getTipoDeCuenta())
+                        .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
+                        .append("\n-------------------------\n");
+            }
+        }
+        JOptionPane.showMessageDialog(null, reporte.toString());
+    }
 }
