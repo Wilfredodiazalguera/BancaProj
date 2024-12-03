@@ -27,7 +27,7 @@ public class Transaccion {
     //Metodos
     public static void realizarDeposito() {
         int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de identificación del cliente:"));
-        Cuenta cuenta = obtenerCuentaPorIdentificacion(numeroIdentificacion); 
+        Cuenta cuenta = obtenerCuentaPorIdentificacion(numeroIdentificacion);
 
         if (cuenta != null) {
             double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a depositar:"));
@@ -35,7 +35,6 @@ public class Transaccion {
                 JOptionPane.showMessageDialog(null, "Monto inválido.");
                 return;
             }
-
 
             cuenta.setSaldoInicial(cuenta.getSaldoInicial() + monto);
             registrarTransaccion(new Transaccion(monto, TipoTransaccion.Deposito, cuenta, null));
@@ -46,15 +45,62 @@ public class Transaccion {
     }
 
     public static void realizarRetiro() {
-        double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a depositar:"));
-        if (monto <= 0) {
-            JOptionPane.showMessageDialog(null, "Monto inválido.");
-            return;
+        int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de identificación del cliente:"));
+        Cuenta cuenta = obtenerCuentaPorIdentificacion(numeroIdentificacion);
+
+        if (cuenta != null) {
+            double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a retirar:"));
+            if (monto <= 0) {
+                JOptionPane.showMessageDialog(null, "Monto inválido.");
+                return;
+            }
+            if (cuenta.getSaldoInicial() >= monto) {
+                cuenta.setSaldoInicial(cuenta.getSaldoInicial() - monto);
+                registrarTransaccion(new Transaccion(monto, TipoTransaccion.Retiro, cuenta, null));
+                JOptionPane.showMessageDialog(null, "Retiro realizado exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "Saldo insuficiente.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Cuenta no encontrada.");
         }
     }
 
     public static void realizarTransferencia() {
+        int numeroIdentificacionOrigen = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de identificación de la cuenta origen:"));
+        Cuenta cuentaOrigen = obtenerCuentaPorIdentificacion(numeroIdentificacionOrigen);
+
+        if (cuentaOrigen != null) {
+            int numeroIdentificacionDestino = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de identificación de la cuenta destino:"));
+            Cuenta cuentaDestino = obtenerCuentaPorIdentificacion(numeroIdentificacionDestino);
+            if (cuentaDestino != null) {
+
+                if (cuentaOrigen.getTipoDeCuenta() != cuentaDestino.getTipoDeCuenta()) {
+                    JOptionPane.showMessageDialog(null, "Las cuentas deben ser del mismo tipo (Corriente a Corriente o Ahorros a Ahorros).");
+                    return;
+                }
+                double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto a transferir:"));
+                if (monto <= 0) {
+                    JOptionPane.showMessageDialog(null, "Monto inválido.");
+                    return;
+                }
+                if (cuentaOrigen.getSaldoInicial() >= monto) {
+                    cuentaOrigen.setSaldoInicial(cuentaOrigen.getSaldoInicial() - monto);
+                    cuentaDestino.setSaldoInicial(cuentaDestino.getSaldoInicial() + monto);
+
+                    registrarTransaccion(new Transaccion(monto, TipoTransaccion.Transferencia, cuentaOrigen, cuentaDestino));
+                    JOptionPane.showMessageDialog(null, "Transferencia realizada exitosamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Saldo insuficiente en la cuenta origen.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Cuenta destino no encontrada.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Cuenta origen no encontrada.");
+        }
     }
+
 
     public static Cuenta obtenerCuentaPorIdentificacion(int numeroIdentificacion) {
         for (Cuenta cuenta : BancaProj.getCuentasRegistradas()) {

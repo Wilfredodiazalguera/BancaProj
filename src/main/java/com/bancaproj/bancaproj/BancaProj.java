@@ -52,10 +52,10 @@ public class BancaProj {
                             Transaccion.realizarDeposito();
                             break;
                         case 2: //Retiro
-                            //Transaccion.realizarRetiro();
+                            Transaccion.realizarRetiro();
                             break;
                         case 3: //Transferencia
-                            //Transaccion.realizarTransferencia();
+                            Transaccion.realizarTransferencia();
                             break;
                     }
                     break;
