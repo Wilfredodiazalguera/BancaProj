@@ -166,17 +166,37 @@ public class BancaProj {
     } // Aca se termina el metodo ImprimirCuentasActivasPorTipo()
 
     public static void reporteTransaccionesPorCuenta() {
-        StringBuilder reporte = new StringBuilder();
+        int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingresa el número de identificación del cliente"));
+        Cuenta cuentaSeleccionada = Transaccion.obtenerCuentaPorIdentificacion(numeroIdentificacion);
 
-        for (Cuenta cuenta : cuentasRegistradas) {
-            if (cuenta != null) {
-                reporte.append("Cuenta N°: ").append(cuenta.getNumeroCuenta())
-                        .append("\nCliente: ").append(cuenta.getNombreCliente())
-                        .append("\nTipo de Cuenta: ").append(cuenta.getTipoDeCuenta())
-                        .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
+        if (cuentaSeleccionada == null) {
+            JOptionPane.showMessageDialog(null, "Cuenta no encontrada");
+            return;
+        }
+
+        StringBuilder reporte = new StringBuilder();
+        reporte.append("Reporte de transacciones para la cuenta:\n")
+                .append("Cuenta N°: ").append(cuentaSeleccionada.getNumeroCuenta()).append("\n")
+                .append("Cliente: ").append(cuentaSeleccionada.getNombreCliente()).append("\n")
+                .append("Tipo de Cuenta: ").append(cuentaSeleccionada.getTipoDeCuenta()).append("\n")
+                .append("-------------------------\n");
+
+        boolean hayTransacciones = false;
+
+        for (Transaccion transaccion : Transaccion.totalTransacciones) {
+            if (transaccion != null && transaccion.getCuentaOrigen() == cuentaSeleccionada) {
+                reporte.append("Tipo: ").append(transaccion.tipoTransaccion.toString())
+                .append("\nMonto: ").append(transaccion.getMonto())
+                        .append("\nFecha: ").append(transaccion.getFecha())
                         .append("\n-------------------------\n");
+                hayTransacciones = true;
             }
         }
+
+        if (!hayTransacciones) {
+            reporte.append("No hay transacciones registradas para esta cuenta.");
+        }
+
         JOptionPane.showMessageDialog(null, reporte.toString());
     }
 }

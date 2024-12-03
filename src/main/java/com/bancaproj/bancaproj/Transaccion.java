@@ -8,7 +8,7 @@ public class Transaccion {
     public static Transaccion[] totalTransacciones = new Transaccion[100];
     private static int totalTransaccionesRegistradas = 0;
     private double monto;
-    private TipoTransaccion tipoTransaccion;
+    TipoTransaccion tipoTransaccion;
     private Cuenta cuentaOrigen;
     private Cuenta cuentaDestino;
     private LocalDateTime fechaTransaccion;
@@ -101,7 +101,6 @@ public class Transaccion {
         }
     }
 
-
     public static Cuenta obtenerCuentaPorIdentificacion(int numeroIdentificacion) {
         for (Cuenta cuenta : BancaProj.getCuentasRegistradas()) {
             if (cuenta != null && cuenta.getNumeroDeIdentificacion() == numeroIdentificacion) {
@@ -128,6 +127,14 @@ public class Transaccion {
         return fechaTransaccion;
     }
 
+    public Cuenta getCuentaOrigen() {
+        return cuentaOrigen;
+    }
+
+    public Cuenta getCuentaDestino() {
+        return cuentaDestino;
+    }
+
     //Setter
     public void setMonto(double monto) {
         this.monto = monto;
@@ -135,6 +142,14 @@ public class Transaccion {
 
     public void setTipoTransaccion(TipoTransaccion tipoTransaccion) {
         this.tipoTransaccion = tipoTransaccion;
+    }
+
+    public void setCuentaDestino(Cuenta cuentaDestino) {
+        this.cuentaDestino = cuentaDestino;
+    }
+
+    public void setCuentaOrigen(Cuenta cuentaOrigen) {
+        this.cuentaOrigen = cuentaOrigen;
     }
 
 }
