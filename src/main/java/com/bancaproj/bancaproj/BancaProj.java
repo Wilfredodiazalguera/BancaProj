@@ -39,6 +39,7 @@ public class BancaProj {
                     registrarCuenta(nuevaCuenta, cuentasRegistradas);
                     //Imprimir 
                     JOptionPane.showMessageDialog(null, "Cuenta creada, numero cuenta: " + nuevaCuenta.getNumeroCuenta());
+                    JOptionPane.showMessageDialog(null, " Fecha de apertura: " + nuevaCuenta.getFechaDeApertura());
                     break;
                 case 2:
                     String menuTransacciones = "Seleccione el tipo de transaccion\n"
