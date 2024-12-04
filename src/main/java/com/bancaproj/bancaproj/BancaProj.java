@@ -127,6 +127,7 @@ public class BancaProj {
                         tieneCuentasCorrientes = true;
                     }
                     reporte.append("\nCliente: ").append(cuenta.getNombreCliente())
+                            .append("\nNúmero de identificacion: ").append(cuenta.getNumeroDeIdentificacion())
                             .append("\nNúmero de cuenta: ").append(cuenta.getNumeroCuenta())
                             .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
                             .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())
@@ -138,6 +139,7 @@ public class BancaProj {
                         tieneCuentasAhorros = true;
                     }
                     reporte.append("\nCliente: ").append(cuenta.getNombreCliente())
+                            .append("\nNúmero de identificacion: ").append(cuenta.getNumeroDeIdentificacion())
                             .append("\nNúmero de cuenta: ").append(cuenta.getNumeroCuenta())
                             .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
                             .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())
@@ -149,6 +151,7 @@ public class BancaProj {
                         tieneCuentasEmpresariales = true;
                     }
                     reporte.append("\nCliente: ").append(cuenta.getNombreCliente())
+                            .append("\nNúmero de identificacion: ").append(cuenta.getNumeroDeIdentificacion())
                             .append("\nNúmero de cuenta: ").append(cuenta.getNumeroCuenta())
                             .append("\nSaldo Inicial: ").append(cuenta.getSaldoInicial())
                             .append("\nFecha de Apertura: ").append(cuenta.getFechaDeApertura())

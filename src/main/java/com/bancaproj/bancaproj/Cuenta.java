@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Cuenta {
     
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm:ss MM/dd/yyyy");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm MM/dd/yyyy");
     private String nombreCliente;
     private int numeroDeIdentificacion;
     private TipoCuenta tipoDeCuenta;
