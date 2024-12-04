@@ -73,7 +73,7 @@ public class BancaProj {
 
                     switch (opcionReporte) {
                         case 1:
-                            ImprimirCuentasActivasPorTipo();
+                            imprimirCuentasActivasPorTipo();
                             break;
                         case 2:
                             reporteTransaccionesPorCuenta();
@@ -107,7 +107,7 @@ public class BancaProj {
         return cuentasRegistradas;
     }
 
-    public static void ImprimirCuentasActivasPorTipo() {
+    public static void imprimirCuentasActivasPorTipo() {
         StringBuilder reporte = new StringBuilder();
 
         //Estas varibales nos ayudan a imprimir solo una unica vez cada encabezado
@@ -163,7 +163,7 @@ public class BancaProj {
             // Mostrar el reporte de las cuentas activas agrupadas por tipo
             JOptionPane.showMessageDialog(null, reporte.toString());
         }
-    } // Aca se termina el metodo ImprimirCuentasActivasPorTipo()
+    } // Aca se termina el metodo imprimirCuentasActivasPorTipo()
 
     public static void reporteTransaccionesPorCuenta() {
         StringBuilder reporte = new StringBuilder();

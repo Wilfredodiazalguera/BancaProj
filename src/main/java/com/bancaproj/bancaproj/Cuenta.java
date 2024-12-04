@@ -2,6 +2,7 @@ package com.bancaproj.bancaproj;
 
 import java.util.Random;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Cuenta {
 
@@ -9,11 +10,13 @@ public class Cuenta {
     private int numeroDeIdentificacion;
     private TipoCuenta tipoDeCuenta;
     private double saldoInicial;
-    private String fechaDeCierre;
+    private LocalDateTime fechaDeCierre;
     private boolean estaActiva;
     private String numeroCuenta;
     private static Random random = new Random();
     private LocalDateTime fechaApertura;
+
+    DateTimeFormatter formateadorFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Cuenta() {
     }
@@ -63,11 +66,11 @@ public class Cuenta {
         this.saldoInicial = saldoInicial;
     }
 
-    public String getFechaDeCierre() {
+    public LocalDateTime getFechaDeCierre() {
         return fechaDeCierre;
     }
 
-    public void setFechaDeCierre(String fechaDeCierre) {
+    public void setFechaDeCierre(LocalDateTime fechaDeCierre) {
         this.fechaDeCierre = fechaDeCierre;
     }
 
@@ -83,8 +86,8 @@ public class Cuenta {
         return numeroCuenta;
     }
 
-    public LocalDateTime getFechaDeApertura() {
-        return fechaApertura;
+    public String getFechaDeApertura() {
+        return fechaApertura.format(formateadorFecha);
     }
 
     public void setFechaApertura() {
@@ -122,8 +125,8 @@ public class Cuenta {
         }
         return existeIdentificacion;
     }
-    
-      public static TipoCuenta mappearTipoCuenta(int opcionTipoCuenta) {
+
+    public static TipoCuenta mappearTipoCuenta(int opcionTipoCuenta) {
         TipoCuenta tipoCuentaSeleccionado = null;
 
         if (opcionTipoCuenta == 1) {
