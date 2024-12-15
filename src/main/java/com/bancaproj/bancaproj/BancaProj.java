@@ -17,7 +17,7 @@ public class BancaProj {
                 + "4. Módulo de reportes.\n"
                 + "5. Eliminar Cuenta\n"
                 + "6. Salir.\n";
-        while (opcion != 5) {
+        while (opcion != 6) {
             opcion = Integer.parseInt(JOptionPane.showInputDialog(textoMenuPrincipal));
 
             switch (opcion) {
@@ -258,12 +258,14 @@ public class BancaProj {
     }
 
     public static void eliminarCuenta() {
-
+        // Pedir al usuario el número de identificación de la cuenta a eliminar
         int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Digite el número de identificación de la cuenta a eliminar"));
 
+        // Variables para buscar la cuenta a eliminar
         Cuenta cuentaAEliminar = null;
         int posicion = -1;
 
+        // Buscar la cuenta por el número de identificación
         for (int i = 0; i < cuentasRegistradas.length; i++) {
             if (cuentasRegistradas[i] != null && cuentasRegistradas[i].getNumeroDeIdentificacion() == numeroIdentificacion) {
                 cuentaAEliminar = cuentasRegistradas[i];
@@ -271,17 +273,23 @@ public class BancaProj {
                 break;
             }
         }
+
+        // Si la cuenta no existe
         if (cuentaAEliminar == null) {
             JOptionPane.showMessageDialog(null, "La cuenta no existe.");
-        } else if (cuentaAEliminar.getSaldoInicial() > 0) {
+        } // Si la cuenta tiene saldo positivo
+        else if (cuentaAEliminar.getSaldoInicial() > 0) {
             JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene saldo positivo.");
-        } else if (cuentaAEliminar.tienePrestamosActivos()) {
+        } // Si la cuenta tiene préstamos activos
+        else if (cuentaAEliminar.tienePrestamosActivos()) {
             JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene préstamos activos.");
-        } else {
+        } // Si la cuenta se puede eliminar
+        else {
             cuentaAEliminar.setEstaActiva(false);
             cuentasRegistradas[posicion] = null;
             JOptionPane.showMessageDialog(null, "La cuenta ha sido eliminada exitosamente.");
         }
-    }
 
+        // Regresamos al menú principal sin modificar la opción
+    }
 }
