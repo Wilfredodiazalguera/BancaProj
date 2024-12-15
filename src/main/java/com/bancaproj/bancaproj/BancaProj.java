@@ -1,11 +1,14 @@
 package com.bancaproj.bancaproj;
 
+import static com.bancaproj.bancaproj.Prestamo.contadorPrestamos;
+import static com.bancaproj.bancaproj.Prestamo.listaPrestamos;
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
 public class BancaProj {
 
     private static int contadorCuentas = 0;
-    private static Cuenta[] cuentasRegistradas = new Cuenta[50];
+    static Cuenta[] cuentasRegistradas = new Cuenta[50];
 
     public static void main(String[] args) {
         int opcion = 0;
@@ -61,6 +64,9 @@ public class BancaProj {
                     }
                     break;
                 case 3:
+                    String input = JOptionPane.showInputDialog("Ingrese el número de identificación: ");
+                    numeroIdentificacion = Integer.parseInt(input);
+                    agregarPrestamo(numeroIdentificacion); 
                     break;
                 case 4:
                     opcion = 0;
@@ -96,7 +102,7 @@ public class BancaProj {
 
     }
 
-    public static void registrarCuenta(Cuenta cuenta, Cuenta[] reporte) {
+    private static void registrarCuenta(Cuenta cuenta, Cuenta[] reporte) {
         if (contadorCuentas < reporte.length) {
             reporte[contadorCuentas++] = cuenta;
         } else {
@@ -190,7 +196,7 @@ public class BancaProj {
         for (Transaccion transaccion : Transaccion.totalTransacciones) {
             if (transaccion != null && transaccion.getCuentaOrigen() == cuentaSeleccionada) {
                 reporte.append("Tipo: ").append(transaccion.tipoTransaccion.toString())
-                .append("\nMonto: ").append(transaccion.getMonto())
+                        .append("\nMonto: ").append(transaccion.getMonto())
                         .append("\nFecha: ").append(transaccion.getFecha())
                         .append("\n-------------------------\n");
                 hayTransacciones = true;
@@ -202,5 +208,50 @@ public class BancaProj {
         }
 
         JOptionPane.showMessageDialog(null, reporte.toString());
+    }
+
+    public static void agregarPrestamo(int numeroDeIdentificacion) {
+        Cuenta cuentaCliente = null;
+        for (Cuenta cuenta : BancaProj.cuentasRegistradas) {
+            if (cuenta != null && cuenta.getNumeroDeIdentificacion() == numeroDeIdentificacion) {
+                cuentaCliente = cuenta;
+                break;
+            }
+        }
+
+        if (cuentaCliente == null) {
+            JOptionPane.showMessageDialog(null, "El cliente no tiene una cuenta registrada. No se puede solicitar un préstamo.");
+            return;
+        }
+
+        int prestamosActivos = 0;
+        for (Prestamo prestamo : listaPrestamos) {
+            if (prestamo != null && prestamo.getNumeroDeIdentificacion() == numeroDeIdentificacion) {
+                prestamosActivos++;
+            }
+        }
+
+        if (prestamosActivos >= 2) {
+            JOptionPane.showMessageDialog(null, "El cliente ya tiene el máximo de 2 préstamos activos.");
+            return;
+        }
+
+        String nombre = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+        double monto = Double.parseDouble(JOptionPane.showInputDialog("Ingrese el monto del préstamo:"));
+        double tasa = Double.parseDouble(JOptionPane.showInputDialog("Ingrese la tasa de interés anual (en porcentaje):")) / 100;
+        int plazo = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el plazo del préstamo en meses:"));
+
+        Prestamo nuevoPrestamo = new Prestamo(nombre, numeroDeIdentificacion, monto, tasa, plazo);
+        nuevoPrestamo.setNumeroOperacion();  // Generar el número de operación
+
+        nuevoPrestamo.calcularCuotaMensual();
+        JOptionPane.showMessageDialog(null, "Préstamo registrado con éxito.\nNúmero de operación: " + nuevoPrestamo.getNumeroOperacion() + "\nFecha: " + nuevoPrestamo.getFechaInicio());
+
+        if (contadorPrestamos < listaPrestamos.length) {
+            listaPrestamos[contadorPrestamos] = nuevoPrestamo;
+            contadorPrestamos++;
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay espacio para más préstamos.");
+        }
     }
 }

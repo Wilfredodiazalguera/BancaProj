@@ -1,6 +1,8 @@
 package com.bancaproj.bancaproj;
 
 import java.time.LocalDateTime;
+import java.util.Random;
+import javax.swing.JOptionPane;
 
 public class Prestamo {
 
@@ -8,9 +10,12 @@ public class Prestamo {
     private int numeroDeIdentificacion;
     private double montoPrestamo;
     private double tasaInteres;
-    private LocalDateTime fechaInicio; 
+    private LocalDateTime fechaInicio;
     private int plazoMeses;
-    private int numeroOperacion;
+    private String numeroOperacion;
+
+    public static Prestamo[] listaPrestamos = new Prestamo[100]; // Son 50 cuentas y solo dos prestamos por cuenta por el 100
+    public static int contadorPrestamos = 0;
 
     public Prestamo() {
     }
@@ -21,10 +26,10 @@ public class Prestamo {
         setMontoPrestamo(montoPrestamo);
         setTasaInteres(tasaInteres);
         setPlazoMeses(plazoMeses);
-        setNumeroOperacion();
+        setFechaInicio(LocalDateTime.now());
     }
 
-    //Getters
+    // Getters
     public String getNombreCliente() {
         return nombreCliente;
     }
@@ -49,11 +54,11 @@ public class Prestamo {
         return plazoMeses;
     }
 
-    public int getNumeroOperacion() {
+    public String getNumeroOperacion() {
         return numeroOperacion;
     }
 
-    //Setters
+    // Setters
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
     }
@@ -77,19 +82,41 @@ public class Prestamo {
     public void setPlazoMeses(int plazoMeses) {
         this.plazoMeses = plazoMeses;
     }
-    
-     //Calcular de forma automatica, ver doc para validar el formato
+
     public void setNumeroOperacion() {
-      
+        String nuevoNumeroOperacion;
+        Random random = new Random();
+
+        do {
+            int parteUno = random.nextInt(1000, 10000);
+            int parteDos = random.nextInt(1000, 10000);
+            String anno = String.valueOf(LocalDateTime.now().getYear());
+            nuevoNumeroOperacion = String.format("%s-%s-%s", parteUno, parteDos, anno);
+
+        } while (validarUnicoNumeroOperacion(nuevoNumeroOperacion));
+
+        this.numeroOperacion = nuevoNumeroOperacion;
     }
 
-    //Metodos
+    private boolean validarUnicoNumeroOperacion(String numero) {
+        for (Prestamo prestamo : listaPrestamos) {
+            if (prestamo != null && numero.equals(prestamo.getNumeroOperacion())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void calcularCuotaMensual() {
+        double tasaMensual = this.tasaInteres / 12;
+        double factor = 1;
+        for (int i = 0; i < plazoMeses; i++) {
+            factor *= (1 + tasaMensual);
+        }
+        factor = 1 / factor;
+        double cuotaMensual = (montoPrestamo * tasaMensual) / (1 - factor);
 
+        JOptionPane.showMessageDialog(null, "La cuota mensual es: " + cuotaMensual);
     }
 
-    //Agregar el prestamo activo al cliente
-    public void agregarPrestamo(int numeroDeIdentificacion) {
-        
-    }
-};
+}
