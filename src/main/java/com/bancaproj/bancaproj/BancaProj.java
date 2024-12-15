@@ -1,7 +1,5 @@
 package com.bancaproj.bancaproj;
 
-import static com.bancaproj.bancaproj.Prestamo.contadorPrestamos;
-import static com.bancaproj.bancaproj.Prestamo.listaPrestamos;
 import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
@@ -17,7 +15,8 @@ public class BancaProj {
                 + "2. Proceso de Transacciones\n"
                 + "3. Registro de préstamos\n"
                 + "4. Módulo de reportes.\n"
-                + "5. Salir.\n";
+                + "5. Eliminar Cuenta\n"
+                + "6. Salir.\n";
         while (opcion != 5) {
             opcion = Integer.parseInt(JOptionPane.showInputDialog(textoMenuPrincipal));
 
@@ -94,6 +93,9 @@ public class BancaProj {
                     }
                     break;
                 case 5:
+                    eliminarCuenta();
+                    break;
+                case 6:
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "Opción inválida. Intenta nuevamente.");
@@ -225,7 +227,7 @@ public class BancaProj {
         }
 
         int prestamosActivos = 0;
-        for (Prestamo prestamo : listaPrestamos) {
+        for (Prestamo prestamo : Prestamo.listaPrestamos) {
             if (prestamo != null && prestamo.getNumeroDeIdentificacion() == numeroDeIdentificacion) {
                 prestamosActivos++;
             }
@@ -247,9 +249,9 @@ public class BancaProj {
         nuevoPrestamo.calcularCuotaMensual();
         JOptionPane.showMessageDialog(null, "Préstamo registrado con éxito.\nNúmero de operación: " + nuevoPrestamo.getNumeroOperacion() + "\nFecha: " + nuevoPrestamo.getFechaInicio());
 
-        if (contadorPrestamos < listaPrestamos.length) {
-            listaPrestamos[contadorPrestamos] = nuevoPrestamo;
-            contadorPrestamos++;
+        if (Prestamo.contadorPrestamos < Prestamo.listaPrestamos.length) {
+            Prestamo.listaPrestamos[Prestamo.contadorPrestamos] = nuevoPrestamo;
+            Prestamo.contadorPrestamos++;
         } else {
             JOptionPane.showMessageDialog(null, "No hay espacio para más préstamos.");
         }
@@ -269,25 +271,17 @@ public class BancaProj {
                 break;
             }
         }
-
         if (cuentaAEliminar == null) {
             JOptionPane.showMessageDialog(null, "La cuenta no existe.");
-            return;
-        }
-
-        if (cuentaAEliminar.getSaldoInicial() > 0) {
+        } else if (cuentaAEliminar.getSaldoInicial() > 0) {
             JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene saldo positivo.");
-            return;
+        } else if (cuentaAEliminar.tienePrestamosActivos()) {
+            JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene préstamos activos.");
+        } else {
+            cuentaAEliminar.setEstaActiva(false);
+            cuentasRegistradas[posicion] = null;
+            JOptionPane.showMessageDialog(null, "La cuenta ha sido eliminada exitosamente.");
         }
-        
-        if (cuentaAEliminar.tienePrestamosActivos()) {
-        JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene préstamos activos.");
-        return;
-    }
-        
-        cuentaAEliminar.setEstaActiva(false);
-        cuentasRegistradas[posicion] = null;
-        JOptionPane.showMessageDialog(null, "La cuenta ha sido eliminada exitosamente.");
     }
 
 }

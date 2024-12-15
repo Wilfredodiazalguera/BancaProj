@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Cuenta {
-    
+
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm MM/dd/yyyy");
     private String nombreCliente;
     private int numeroDeIdentificacion;
@@ -124,8 +124,8 @@ public class Cuenta {
         }
         return existeIdentificacion;
     }
-    
-      public static TipoCuenta mappearTipoCuenta(int opcionTipoCuenta) {
+
+    public static TipoCuenta mappearTipoCuenta(int opcionTipoCuenta) {
         TipoCuenta tipoCuentaSeleccionado = null;
 
         if (opcionTipoCuenta == 1) {
@@ -139,6 +139,15 @@ public class Cuenta {
         }
 
         return tipoCuentaSeleccionado;
+    }
+
+    public boolean tienePrestamosActivos() {
+        for (Prestamo prestamo : Prestamo.listaPrestamos) {
+            if (prestamo != null && prestamo.getNumeroDeIdentificacion() == this.numeroDeIdentificacion) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
