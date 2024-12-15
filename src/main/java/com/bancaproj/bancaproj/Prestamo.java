@@ -1,24 +1,25 @@
 package com.bancaproj.bancaproj;
 
+import java.time.LocalDateTime;
+
 public class Prestamo {
 
     private String nombreCliente;
     private int numeroDeIdentificacion;
     private double montoPrestamo;
     private double tasaInteres;
-    private String fechaInicio; //Pendiente; la fecha de incio se debe generar automaticamnete al dia de hoy?
+    private LocalDateTime fechaInicio; 
     private int plazoMeses;
     private int numeroOperacion;
 
     public Prestamo() {
     }
 
-    public Prestamo(String nombreCliente, int numeroDeIdentificacion, double montoPrestamo, double tasaInteres, String fechaInicio, int plazoMeses) {
+    public Prestamo(String nombreCliente, int numeroDeIdentificacion, double montoPrestamo, double tasaInteres, int plazoMeses) {
         setNombreCliente(nombreCliente);
         setNumeroDeIdentificacion(numeroDeIdentificacion);
         setMontoPrestamo(montoPrestamo);
         setTasaInteres(tasaInteres);
-        setFechaInicio(fechaInicio); // Pending
         setPlazoMeses(plazoMeses);
         setNumeroOperacion();
     }
@@ -40,7 +41,7 @@ public class Prestamo {
         return tasaInteres;
     }
 
-    public String getFechaInicio() {
+    public LocalDateTime getFechaInicio() {
         return fechaInicio;
     }
 
@@ -69,7 +70,7 @@ public class Prestamo {
         this.tasaInteres = tasaInteres;
     }
 
-    public void setFechaInicio(String fechaInicio) {
+    public void setFechaInicio(LocalDateTime fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
