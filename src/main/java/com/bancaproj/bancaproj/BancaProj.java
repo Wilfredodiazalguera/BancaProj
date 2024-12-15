@@ -66,7 +66,7 @@ public class BancaProj {
                 case 3:
                     String input = JOptionPane.showInputDialog("Ingrese el número de identificación: ");
                     numeroIdentificacion = Integer.parseInt(input);
-                    agregarPrestamo(numeroIdentificacion); 
+                    agregarPrestamo(numeroIdentificacion);
                     break;
                 case 4:
                     opcion = 0;
@@ -254,4 +254,40 @@ public class BancaProj {
             JOptionPane.showMessageDialog(null, "No hay espacio para más préstamos.");
         }
     }
+
+    public static void eliminarCuenta() {
+
+        int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Digite el número de identificación de la cuenta a eliminar"));
+
+        Cuenta cuentaAEliminar = null;
+        int posicion = -1;
+
+        for (int i = 0; i < cuentasRegistradas.length; i++) {
+            if (cuentasRegistradas[i] != null && cuentasRegistradas[i].getNumeroDeIdentificacion() == numeroIdentificacion) {
+                cuentaAEliminar = cuentasRegistradas[i];
+                posicion = i;
+                break;
+            }
+        }
+
+        if (cuentaAEliminar == null) {
+            JOptionPane.showMessageDialog(null, "La cuenta no existe.");
+            return;
+        }
+
+        if (cuentaAEliminar.getSaldoInicial() > 0) {
+            JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene saldo positivo.");
+            return;
+        }
+        
+        if (cuentaAEliminar.tienePrestamosActivos()) {
+        JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene préstamos activos.");
+        return;
+    }
+        
+        cuentaAEliminar.setEstaActiva(false);
+        cuentasRegistradas[posicion] = null;
+        JOptionPane.showMessageDialog(null, "La cuenta ha sido eliminada exitosamente.");
+    }
+
 }
