@@ -1,6 +1,5 @@
 package com.bancaproj.bancaproj;
 
-import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 
 public class BancaProj {
