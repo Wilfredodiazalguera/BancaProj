@@ -16,7 +16,7 @@ public class BancaProj {
                 + "3. Registro de préstamos\n"
                 + "4. Módulo de reportes.\n"
                 + "5. Eliminar Cuenta\n"
-                + "6. Salir.\n";
+                + "6. Eliminar Prestamo\n";
         while (opcion != 6) {
             opcion = Integer.parseInt(JOptionPane.showInputDialog(textoMenuPrincipal));
 
@@ -85,6 +85,7 @@ public class BancaProj {
                             reporteTransaccionesPorCuenta();
                             break;
                         case 3:
+                            imprimirPrestamosActivosPorCliente();
                             break;
                         case 4:
                             break;
@@ -96,6 +97,7 @@ public class BancaProj {
                     eliminarCuenta();
                     break;
                 case 6:
+                    eliminarPrestamosPorCuenta();
                     break;
                 default:
                     JOptionPane.showMessageDialog(null, "Opción inválida. Intenta nuevamente.");
@@ -272,15 +274,115 @@ public class BancaProj {
 
         if (cuentaAEliminar == null) {
             JOptionPane.showMessageDialog(null, "La cuenta no existe.");
-        } else if (cuentaAEliminar.getSaldoInicial() > 0) {
-            JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene saldo positivo.");
-        } else if (cuentaAEliminar.tienePrestamosActivos()) {
-            JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene préstamos activos.");
-        } else {
-            cuentaAEliminar.setEstaActiva(false);
-            cuentasRegistradas[posicion] = null;
-            JOptionPane.showMessageDialog(null, "La cuenta ha sido eliminada exitosamente.");
+            return;
         }
 
+        if (cuentaAEliminar.getSaldoInicial() > 0) {
+            JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene saldo positivo.");
+            return;
+        }
+
+        if (cuentaAEliminar.tienePrestamosActivos()) {
+            JOptionPane.showMessageDialog(null, "La cuenta no puede eliminarse porque tiene préstamos activos.");
+            return;
+        }
+
+        StringBuilder resumenMovimientos = new StringBuilder();
+        resumenMovimientos.append("Resumen de Movimientos de la Cuenta:\n");
+        resumenMovimientos.append("Cliente: ").append(cuentaAEliminar.getNombreCliente()).append("\n");
+        resumenMovimientos.append("Número de Cuenta: ").append(cuentaAEliminar.getNumeroCuenta()).append("\n");
+        resumenMovimientos.append("Tipo de Cuenta: ").append(cuentaAEliminar.getTipoDeCuenta()).append("\n");
+        resumenMovimientos.append("Saldo Inicial: ").append(cuentaAEliminar.getSaldoInicial()).append("\n");
+        resumenMovimientos.append("Fecha de Apertura: ").append(cuentaAEliminar.getFechaDeApertura()).append("\n");
+        resumenMovimientos.append("Movimientos:\n");
+
+        boolean tieneMovimientos = false;
+        for (Transaccion transaccion : Transaccion.totalTransacciones) {
+            if (transaccion != null && transaccion.getCuentaOrigen() == cuentaAEliminar) {
+                resumenMovimientos.append("Tipo: ").append(transaccion.tipoTransaccion.toString())
+                        .append("\nMonto: ").append(transaccion.getMonto())
+                        .append("\nFecha: ").append(transaccion.getFecha())
+                        .append("\n-------------------------\n");
+                tieneMovimientos = true;
+            }
+        }
+
+        if (!tieneMovimientos) {
+            resumenMovimientos.append("No se registraron movimientos en esta cuenta.");
+        }
+
+        JOptionPane.showMessageDialog(null, resumenMovimientos.toString());
+        cuentaAEliminar.setEstaActiva(false);
+        cuentaAEliminar.setFechaDeCierre();
+        cuentasRegistradas[posicion] = null;
+
+        JOptionPane.showMessageDialog(null, "La cuenta ha sido eliminada exitosamente.");
     }
+
+    public static void imprimirPrestamosActivosPorCliente() {
+        StringBuilder reporte = new StringBuilder();
+
+        boolean tienePrestamos = false;
+
+        for (Prestamo prestamo : Prestamo.listaPrestamos) {
+            if (prestamo != null) {
+
+                if (prestamo.getMontoPrestamo() > 0) {
+
+                    if (!tienePrestamos) {
+                        reporte.append("\nPréstamos Activos:\n");
+                        tienePrestamos = true;
+                    }
+
+                    reporte.append("\nCliente: ").append(prestamo.getNombreCliente())
+                            .append("\nNúmero de Identificación: ").append(prestamo.getNumeroDeIdentificacion())
+                            .append("\nMonto Pendiente: ").append(prestamo.getMontoPrestamo())
+                            .append("\nTasa de Interés: ").append(prestamo.getTasaInteres() * 100)
+                            .append("%")
+                            .append("\nCuota Mensual: ").append(calcularCuotaMensual(prestamo))
+                            .append("\nMeses Restantes: ").append(prestamo.getPlazoMeses())
+                            .append("\n*************************\n");
+                }
+            }
+        }
+
+        if (reporte.length() == 0) {
+            JOptionPane.showMessageDialog(null, "No hay préstamos activos en este momento.");
+        } else {
+
+            JOptionPane.showMessageDialog(null, reporte.toString());
+        }
+    }
+
+    private static double calcularCuotaMensual(Prestamo prestamo) {
+        double tasaMensual = prestamo.getTasaInteres() / 12;
+        double factor = 1;
+        for (int i = 0; i < prestamo.getPlazoMeses(); i++) {
+            factor *= (1 + tasaMensual);
+        }
+        factor = 1 / factor;
+        return (prestamo.getMontoPrestamo() * tasaMensual) / (1 - factor);
+    }
+
+    public static void eliminarPrestamosPorCuenta() {
+
+        int numeroIdentificacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de identificación de la cuenta para eliminar sus préstamos"));
+
+        boolean prestamosEliminados = false;
+
+        for (int i = 0; i < Prestamo.listaPrestamos.length; i++) {
+            Prestamo prestamo = Prestamo.listaPrestamos[i];
+
+            if (prestamo != null && prestamo.getNumeroDeIdentificacion() == numeroIdentificacion) {
+                Prestamo.listaPrestamos[i] = null;
+                prestamosEliminados = true;
+                JOptionPane.showMessageDialog(null, "Préstamo eliminado con éxito.\nNúmero de operación: " + prestamo.getNumeroOperacion());
+            }
+        }
+
+        if (!prestamosEliminados) {
+            JOptionPane.showMessageDialog(null, "No se encontraron préstamos asociados a esta cuenta.");
+        }
+    }
+
 }
